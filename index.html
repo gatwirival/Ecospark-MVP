@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoSpark - Your Sustainability Companion</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌱 EcoSpark</h1>
+            <p>Your Complete Sustainability Companion</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showPanel('dashboard')">📊 Dashboard</button>
+            <button class="nav-tab" onclick="showPanel('scanner')">📱 Product Scanner</button>
+            <button class="nav-tab" onclick="showPanel('challenges')">🏆 Challenges</button>
+            <button class="nav-tab" onclick="showPanel('habits')">✅ Green Habits</button>
+            <button class="nav-tab" onclick="showPanel('community')">👥 Community</button>
+        </div>
+
+        <!-- Dashboard Panel -->
+        <div id="dashboard" class="content-panel active">
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>Your Environmental Impact</h3>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px;">
+                        <div class="metric-card">
+                            <div class="metric-value">2.3</div>
+                            <div class="metric-label">Tons CO₂ Saved</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">847</div>
+                            <div class="metric-label">EcoPoints</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">156</div>
+                            <div class="metric-label">Gallons Water Saved</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">23</div>
+                            <div class="metric-label">Days Green Streak</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Weekly Impact Trend</h3>
+                    <div class="impact-viz">
+                        <canvas id="impactChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🎯 Quick Actions</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <button class="scan-btn" onclick="showPanel('scanner')">📱 Scan a Product</button>
+                    <button class="scan-btn" onclick="showPanel('challenges')">🏆 Join Challenge</button>
+                    <button class="scan-btn" onclick="showPanel('habits')">✅ Log Green Habit</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scanner Panel -->
+        <div id="scanner" class="content-panel">
+            <div class="card scan-section">
+                <h3>🔍 Product Scanner</h3>
+                <p>Enter a product name or scan barcode to find eco-friendly alternatives</p>
+                <br>
+                <input type="text" class="scan-input" id="productInput" placeholder="e.g., Coca Cola, iPhone 14, Nike Shoes">
+                <br>
+                <button class="scan-btn" onclick="scanProduct()">🔍 Analyze Product</button>
+
+                <div id="scanResult" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Challenges Panel -->
+        <div id="challenges" class="content-panel">
+            <div class="card">
+                <h3>🏆 Active Challenges</h3>
+                <div class="challenges-grid">
+                    <div class="challenge-card" onclick="joinChallenge('bike')">
+                        <h4>🚲 Bike Week Challenge</h4>
+                        <p>Bike instead of driving for 7 days</p>
+                        <div class="challenge-progress">
+                            <div class="progress-fill" style="width: 60%"></div>
+                        </div>
+                        <small>Progress: 4/7 days • 234 participants</small>
+                    </div>
+
+                    <div class="challenge-card" onclick="joinChallenge('plastic')">
+                        <h4>🚫 Plastic-Free Month</h4>
+                        <p>Avoid single-use plastics for 30 days</p>
+                        <div class="challenge-progress">
+                            <div class="progress-fill" style="width: 40%"></div>
+                        </div>
+                        <small>Progress: 12/30 days • 567 participants</small>
+                    </div>
+
+                    <div class="challenge-card" onclick="joinChallenge('energy')">
+                        <h4>⚡ Energy Saver</h4>
+                        <p>Reduce energy consumption by 20%</p>
+                        <div class="challenge-progress">
+                            <div class="progress-fill" style="width: 85%"></div>
+                        </div>
+                        <small>Progress: 17% reduction • 189 participants</small>
+                    </div>
+
+                    <div class="challenge-card" onclick="joinChallenge('food')">
+                        <h4>🌱 Plant-Based Week</h4>
+                        <p>Try plant-based meals for a week</p>
+                        <div class="challenge-progress">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <small>Starting soon • 445 participants</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Habits Panel -->
+        <div id="habits" class="content-panel">
+            <div class="card">
+                <h3>✅ Your Green Habits</h3>
+                <div class="habits-list">
+                    <div class="habit-item">
+                        <input type="checkbox" class="habit-checkbox" checked onchange="updateHabit(this, 'recycle')">
+                        <span>♻️ Sorted recyclables properly</span>
+                        <span class="habit-streak">🔥 23 days</span>
+                    </div>
+
+                    <div class="habit-item">
+                        <input type="checkbox" class="habit-checkbox" checked onchange="updateHabit(this, 'transport')">
+                        <span>🚶 Used sustainable transport</span>
+                        <span class="habit-streak">🔥 15 days</span>
+                    </div>
+
+                    <div class="habit-item">
+                        <input type="checkbox" class="habit-checkbox" onchange="updateHabit(this, 'water')">
+                        <span>💧 Conserved water</span>
+                        <span class="habit-streak">🔥 8 days</span>
+                    </div>
+
+                    <div class="habit-item">
+                        <input type="checkbox" class="habit-checkbox" onchange="updateHabit(this, 'energy')">
+                        <span>⚡ Used renewable energy</span>
+                        <span class="habit-streak">🔥 5 days</span>
+                    </div>
+                </div>
+
+                <button class="add-habit-btn" onclick="addNewHabit()">+ Add New Green Habit</button>
+            </div>
+        </div>
+
+        <!-- Community Panel -->
+        <div id="community" class="content-panel">
+            <div class="card">
+                <h3>🏅 Community Leaderboard</h3>
+                <ul class="leaderboard">
+                    <li>
+                        <span class="rank">#1</span>
+                        <span>🌟 EcoWarrior2024</span>
+                        <span class="points">2,456 pts</span>
+                    </li>
+                    <li>
+                        <span class="rank">#2</span>
+                        <span>🌱 GreenThumb_Sarah</span>
+                        <span class="points">1,987 pts</span>
+                    </li>
+                    <li>
+                        <span class="rank">#3</span>
+                        <span>♻️ RecycleKing</span>
+                        <span class="points">1,743 pts</span>
+                    </li>
+                    <li style="background: linear-gradient(90deg, #FF6B6B, #FF8E8E);">
+                        <span class="rank">#8</span>
+                        <span>🔥 You</span>
+                        <span class="points">847 pts</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>🌍 Global Impact</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                    <div class="metric-card">
+                        <div class="metric-value">12.4K</div>
+                        <div class="metric-label">Active Users</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">567</div>
+                        <div class="metric-label">Tons CO₂ Saved</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">89K</div>
+                        <div class="metric-label">Green Actions</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/chart.js"></script>
+    <script src="js/scanner.js"></script>
+    <script src="js/habits.js"></script>
+    <script src="js/challenges.js"></script>
+    <script src="js/community.js"></script>
+</body>
+</html>
